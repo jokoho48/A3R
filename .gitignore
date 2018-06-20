@@ -1,0 +1,13 @@
+release/*
+*.cache
+*.pbo
+texHeaders.bin
+*.swp
+*.swo
+*.biprivatekey
+Thumbs.db
+
+*.pdb
+/extensions/ArmaAAR/.vs
+/extensions/ArmaAAR/ArmaAAR/bin
+/extensions/ArmaAAR/ArmaAAR/obj
