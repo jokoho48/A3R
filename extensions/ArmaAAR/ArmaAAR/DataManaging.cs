@@ -14,7 +14,7 @@ namespace ArmaAAR
         {
             using (FileStream fs = File.OpenWrite(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "A3R", filename + ".A3R")))
             {
-                GZipStream cmp = new GZipStream(fs, CompressionMode.Compress);
+                GZipStream cmp = new GZipStream(fs, CompressionLevel.Optimal);
                 using (BinaryWriter writer = new BinaryWriter(cmp))
                 {
                     writer.Write(frames.Count);
