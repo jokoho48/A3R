@@ -35,7 +35,8 @@ namespace ArmaAAR
             if (function == "version")
             {
                 output.Append("0.1");
-            } else if (function.StartsWith("setFrameData"))
+            }
+            else if (function.StartsWith("setFrameData"))
             {
                 string[] args = function.Split(new char[] { ';' }, 3);
                 if (!Frames.ContainsKey(args[1]))
@@ -43,14 +44,16 @@ namespace ArmaAAR
                     Frames.Add(args[1], new Frame());
                 }
                 Frames[args[1]].AddFrameData(args[2]);
-            } else if (function.StartsWith("readFrame"))
+            }
+            else if (function.StartsWith("readFrame"))
             {
                 string[] args = function.Split(new char[] { ';' }, 2);
                 if (!Frames.ContainsKey(args[1]))
                 {
                     output.Append(Frames[args[1]].ReadFrameData());
                 }
-            } else if (function.StartsWith("ClearFrameData"))
+            }
+            else if (function.StartsWith("clearFrameData"))
             {
                 foreach (var item in Frames)
                 {
@@ -58,10 +61,22 @@ namespace ArmaAAR
                 }
                 Frames.Clear();
                 currentRecName = "";
-            } else if (function.StartsWith("ImportFrameData"))
+            }
+            else if (function.StartsWith("importFrameData"))
             {
                 string[] args = function.Split(new char[] { ';' }, 2);
                 DataManaging.ImportRecording(args[1]);
+                output.Append("true");
+            }
+            else if (function.StartsWith("exportFrameData"))
+            {
+                string[] args = function.Split(new char[] { ';' }, 2);
+                DataManaging.ExportRecording(Frames ,args[1]);
+                output.Append("true");
+            }
+            else if (function.StartsWith("frameCount"))
+            {
+                output.Append(Frames.Count);
             }
         }
         #endregion Arma Calls
