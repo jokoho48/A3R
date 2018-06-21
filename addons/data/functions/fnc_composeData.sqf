@@ -19,10 +19,14 @@ _allTrackedUnits append allDeadMen;
 GVAR(FrameID) = GVAR(FrameID) + 1;
 _allTrackedUnits apply {
     [
-        str GVAR(FrameID),
+        GVAR(FrameID),
         name _x,
-        str (getPosASLVisual _x),
-        str (getDirVisual _x),
-        str ([sideUnknown, sideEnemy, sideEmpty, sideFriendly, civilian, west, east, independent] find (side _x))
+        getPosASLVisual _x,
+        getDirVisual _x,
+        typeOf _x,
+        alive _x,
+        [sideUnknown, sideEnemy, sideEmpty, sideFriendly, civilian, west, east, independent] find (side _x),
+        leader _x == _x,
+        groupID (group _x)
     ];
 };
