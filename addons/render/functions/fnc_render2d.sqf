@@ -26,7 +26,7 @@ if (_mapScale < 0.1) then {
     _textSize = _textSize * ((_mapScale / 0.1) max 0.5);
 };
 {
-    _x params ["", "_name", "_pos", "_dir", "_type", "_alive", "_side", "_isLeader", "_grpName"];
+    _x params ["", "_name", "_pos", "_dir", "_type", "_alive", "_side", "", "_grpName"];
     private _color = (GVAR(sideColors) select _side);
     private _icon = "\A3\ui_f\data\map\vehicleicons\iconMan_ca.paa";
     if !(_alive) then {
@@ -46,7 +46,7 @@ if (_mapScale < 0.1) then {
 } count GVAR(FrameData);
 
 {
-    _x params ["", "_name", "_pos", "_dir", "_type", "_alive", "_side", "_isLeader", "_grpName"];
+    _x params ["", "", "_pos", "", "", "", "_side", "", "_grpName"];
     _pos = +_pos;
     _pos set [2, 0];
     _pos = _map ctrlMapWorldToScreen _pos;
