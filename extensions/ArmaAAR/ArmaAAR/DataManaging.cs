@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,17 +13,20 @@ namespace ArmaAAR
         public static void ExportRecording(Dictionary<string, Frame> frames, string filename)
         {
             using (FileStream fs = File.OpenWrite(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "A3R", filename + ".A3R")))
-            using (BinaryWriter writer = new BinaryWriter(fs))
             {
-                writer.Write(frames.Count);
-                foreach (var pair in frames)
+                GZipStream cmp = new GZipStream(fs, CompressionMode.Compress);
+                using (BinaryWriter writer = new BinaryWriter(cmp))
                 {
-                    writer.Write(pair.Key);
-                    List<string> data = pair.Value.frameData;
-                    writer.Write(data.Count);
-                    foreach (var item in data)
+                    writer.Write(frames.Count);
+                    foreach (var pair in frames)
                     {
-                        writer.Write(item);
+                        writer.Write(pair.Key);
+                        List<string> data = pair.Value.frameData;
+                        writer.Write(data.Count);
+                        foreach (var item in data)
+                        {
+                            writer.Write(item);
+                        }
                     }
                 }
             }
@@ -32,19 +36,23 @@ namespace ArmaAAR
         {
             Dictionary<string, Frame> database = new Dictionary<string, Frame>();
             using (FileStream fs = File.OpenRead(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "A3R", filename + ".A3R")))
-            using (BinaryReader reader = new BinaryReader(fs))
             {
-                int count = reader.ReadInt32();
-                for (int i = 0; i < count; i++)
+                GZipStream dcmp = new GZipStream(fs, CompressionMode.Decompress);
+
+                using (BinaryReader reader = new BinaryReader(dcmp))
                 {
-                    string key = reader.ReadString();
-                    Frame value = new Frame();
-                    int countData = reader.ReadInt32();
-                    for (int j = 0; j < countData; j++)
+                    int count = reader.ReadInt32();
+                    for (int i = 0; i < count; i++)
                     {
-                        value.AddFrameData(reader.ReadString());
-                    };
-                    database.Add(key, value);
+                        string key = reader.ReadString();
+                        Frame value = new Frame();
+                        int countData = reader.ReadInt32();
+                        for (int j = 0; j < countData; j++)
+                        {
+                            value.AddFrameData(reader.ReadString());
+                        };
+                        database.Add(key, value);
+                    }
                 }
             }
             DllEntry.currentRecName = filename;
