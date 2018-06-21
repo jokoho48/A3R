@@ -25,7 +25,7 @@ _allTrackedUnits apply {
         getDirVisual _x,
         typeOf _x,
         alive _x,
-        [sideUnknown, sideEnemy, sideEmpty, sideFriendly, civilian, west, east, independent] find (side _x),
+        [sideUnknown, sideEnemy, sideEmpty, sideFriendly, sideLogic, civilian, west, east, independent] find (side _x),
         leader _x == _x,
         groupID (group _x)
     ];

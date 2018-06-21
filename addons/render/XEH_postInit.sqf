@@ -10,7 +10,8 @@ addMissionEventHandler ["Draw3D", {
         !(isNull ((findDisplay 12) displayCtrl 51))
     }, {
         ((findDisplay 12) displayCtrl 51) ctrlAddEventHandler ["Draw", {
-            _this call FUNC(render2D);
+            _this call FUNC(render2d);
+            diag_log FUNC(render2d);
         }];
     }
 ] call CBA_fnc_waitUntilAndExecute;
