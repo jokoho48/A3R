@@ -27,6 +27,10 @@ _allTrackedUnits apply {
         alive _x,
         [sideUnknown, sideEnemy, sideEmpty, sideFriendly, sideLogic, civilian, west, east, independent] find (side _x),
         leader _x == _x,
-        groupID (group _x)
+        groupID (group _x),
+        _x getVariable [QGVAR(lastFrameShot), [-1, (vehicle _x) weaponDirection (currentWeapon (vehicle _x))]],
+        typeOf (vehicle _x),
+        getPosASLVisual (vehicle _x),
+        getDirVisual (vehicle _x)
     ];
 };
