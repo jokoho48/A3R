@@ -50,7 +50,7 @@ namespace ArmaAAR
                         for (int j = 0; j < countData; j++)
                         {
                             value.AddFrameData(reader.ReadString());
-                        };
+                        }
                         database.Add(key, value);
                     }
                 }

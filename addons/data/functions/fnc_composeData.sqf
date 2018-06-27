@@ -19,7 +19,7 @@ _allTrackedUnits append allDeadMen;
 GVAR(FrameID) = GVAR(FrameID) + 1;
 _allTrackedUnits apply {
     [
-        GVAR(FrameID),
+        "UNIT",
         name _x,
         getPosASLVisual _x,
         getDirVisual _x,

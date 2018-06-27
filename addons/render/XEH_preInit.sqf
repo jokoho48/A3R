@@ -3,7 +3,7 @@
 ADDON = false;
 
 GVAR(FrameData) = [];
-GVAR(isViewing) = [0, getNumber (missionConfigFile >> "A3R_isViewing")] select (isNumber (missionConfigFile >> "A3R_isViewing")) isEqualTo 1;
+GVAR(isViewing) = ([0, getNumber (missionConfigFile >> "A3R_isViewing")] select (isNumber (missionConfigFile >> "A3R_isViewing"))) isEqualTo 1;
 
 // [sideUnknown, sideEnemy, sideEmpty, sideFriendly, sideLogic, civilian, west, east, independent]
 GVAR(sideColors) = [];

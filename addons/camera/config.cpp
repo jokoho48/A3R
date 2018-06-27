@@ -6,7 +6,7 @@ class CfgPatches {
         units[] = {};
         weapons[] = {};
         requiredVersion = REQUIRED_VERSION;
-        requiredAddons[] = {"A3R_main"};
+        requiredAddons[] = {"A3R_render"};
         author = "";
         authors[] = {""};
         VERSION_CONFIG;

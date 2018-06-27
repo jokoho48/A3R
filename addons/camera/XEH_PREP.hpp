@@ -1,1 +1,2 @@
-PREP(empty);
+PREP(buildUI);
+PREP(updateCamera);

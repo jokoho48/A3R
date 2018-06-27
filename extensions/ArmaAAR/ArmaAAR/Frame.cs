@@ -5,7 +5,7 @@ namespace ArmaAAR
 {
     internal class Frame
     {
-
+        public string data = "";
         public List<string> frameData = new List<string>();
         private int currentDataIndex = 0;
         public Frame() {}
