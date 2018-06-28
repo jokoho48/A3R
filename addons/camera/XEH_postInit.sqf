@@ -18,6 +18,8 @@ addMissionEventHandler ["Draw3D", {
 ] call CBA_fnc_waitUntilAndExecute;
 
 [{
+    GVAR(deltaTime) = time - GVAR(prevTime);
+    GVAR(prevTime) = time;
     if (GVAR(prevFrameID) != GVAR(FrameID)) then {
         private _index = GVAR(FrameData) findIf {(_x select 0) isEqualTo "ENVDATA"};
         if (_index != -1) then {
@@ -34,15 +36,10 @@ addMissionEventHandler ["Draw3D", {
         };
         GVAR(prevFrameID) = GVAR(FrameID);
     };
-}] call CBA_fnc_addPerframeHandler;
-
-// Var Def
-
+    call FUNC(cameraUpdate);
+}, 0] call CBA_fnc_addPerframeHandler;
 
 [
     {!(isNull (findDisplay 49))},
     {call FUNC(buildUI)}
 ] call CBA_fnc_waitUntilAndExecute;
-[{
-    call FUNC(cameraUpdate);
-}, 0] call CBA_fnc_addPerFrameHandler;

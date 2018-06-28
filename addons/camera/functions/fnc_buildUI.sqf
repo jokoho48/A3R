@@ -15,12 +15,17 @@
  */
 #include "script_component.hpp"
 
+/*
 GVAR(Camera) = "Camera" camCreate (eyePos player);
 GVAR(Camera) cameraEffect ["internal", "back"];
 player attachTo [GVAR(Camera), [0, 0, 0]];
 GVAR(CameraPos) = (eyePos player) vectorAdd [0, 0, 50];
 showCinemaBorder false;
 cameraEffectEnableHUD true;
+player hideObjectGlobal true;
+player enableSimulationGlobal false;
+player allowDamage false;
+*/
 
 private _display = (findDisplay 49) createDisplay "RscDisplayEmpty";
 uiNamespace setVariable [QGVAR(Display), _display];
@@ -109,7 +114,7 @@ FUNC(updateProgress) = {
     _pos = (_mouseX - PX(7) ) / (_pos select 2);
     private _oldPos = progressPosition _ctrl;
     if (_pos != _oldPos) then {
-        [QGVAR(PlaySpeedChanged), [_pos, _oldPos]] call CBA_fnc_localEvent;
+        [QGVAR(timeLinePositionChanged), [_pos, _oldPos]] call CBA_fnc_localEvent;
         _ctrl progressSetPosition _pos;
     };
 };
@@ -157,7 +162,11 @@ _ctrlGroupPlayButton ctrlAddEventHandler ["MouseButtonClick", {
 
     GVAR(isPlaying) = !GVAR(isPlaying);
     [QGVAR(playStatusChanged), GVAR(isPlaying)] call CBA_fnc_localEvent;
-    ["\A3\3den\Data\Attributes\ComboPreview\play_ca.paa", "\jk\addons\camera\UI\pause_ca.paa"] select GVAR(isPlaying);
+
+    private _icon = _ctrlGrp getVariable [QGVAR(icon), controlNull];
+    _icon ctrlSetText (["\A3\3den\Data\Attributes\ComboPreview\play_ca.paa", "\jk\A3R\addons\camera\UI\pause_ca.paa"] select GVAR(isPlaying));
+    _icon ctrlCommit 0;
+    DUMP(_this);
 }];
 
 private _ctrlGroupSpeedButton = _display ctrlCreate ["RscControlsGroupNoScrollbars", -1, _ctrlGrpVideoCtrl];
@@ -176,7 +185,7 @@ _ctrlSpeedButtonText ctrlSetFontHeight PY(2.4);
 _ctrlSpeedButtonText ctrlSetFont "RobotoCondensed";
 _ctrlSpeedButtonText ctrlSetTextColor [1, 1, 1, 1];
 _ctrlSpeedButtonText ctrlSetBackgroundColor [0, 0, 0, 0];
-_ctrlSpeedButtonText ctrlSetText "1x";
+_ctrlSpeedButtonText ctrlSetText format ["%1x", GVAR(PlayingSpeed)];
 _ctrlSpeedButtonText ctrlCommit 0;
 _ctrlGroupSpeedButton setVariable [QGVAR(text), _ctrlSpeedButtonText];
 
@@ -195,11 +204,13 @@ _ctrlGroupSpeedButton ctrlAddEventHandler ["MouseButtonClick", {
         default {
             DUMP("Not Bind Mouse Button");
         };
-        [QGVAR(PlaySpeedChanged), GVAR(PlayingSpeed)] call CBA_fnc_localEvent;
-        private _buttonText = _ctrlGrp getVariable [QGVAR(text), controlNull];
-        _buttonText ctrlSetText format ["%1x", GVAR(PlayingSpeed)];
-        _buttonText ctrlCommit 0;
     };
+    GVAR(PlayingSpeed) = GVAR(PlayingSpeed) max 1;
+    GVAR(PlayingSpeed) = GVAR(PlayingSpeed) min 10;
+    [QGVAR(PlaySpeedChanged), GVAR(PlayingSpeed)] call CBA_fnc_localEvent;
+    private _buttonText = _ctrlGrp getVariable [QGVAR(text), controlNull];
+    _buttonText ctrlSetText format ["%1x", GVAR(PlayingSpeed)];
+    _buttonText ctrlCommit 0;
     DUMP(_this);
 }];
 
@@ -211,6 +222,7 @@ _ctrlGroupSpeedButton ctrlAddEventHandler ["MouseButtonClick", {
         private _ctrl = _this getVariable [QGVAR(background), controlNull];
         if !(isNull _ctrl) then {
             _ctrl ctrlSetText "#(argb,8,8,3)color(0,0,0,1)";
+            _ctrl ctrlSetBackgroundColor [0, 0, 0, 1];
             _ctrl ctrlCommit 0.3;
         };
     }];
@@ -220,6 +232,7 @@ _ctrlGroupSpeedButton ctrlAddEventHandler ["MouseButtonClick", {
         private _ctrl = _this getVariable [QGVAR(background), controlNull];
         if !(isNull _ctrl) then {
             _ctrl ctrlSetText "#(argb,8,8,3)color(0,0,0,0)";
+            _ctrl ctrlSetBackgroundColor [0, 0, 0, 0];
             _ctrl ctrlCommit 0.3;
         };
     }];

@@ -6,9 +6,9 @@ class CfgPatches {
         units[] = {};
         weapons[] = {};
         requiredVersion = REQUIRED_VERSION;
-        requiredAddons[] = {"A3R_render"};
-        author = "";
-        authors[] = {""};
+        requiredAddons[] = {"A3R_data"};
+        author = "joko // Jonas & Badguy";
+        authors[] = {"joko // Jonas", "Badguy"};
         VERSION_CONFIG;
     };
 };

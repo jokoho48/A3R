@@ -15,7 +15,7 @@
  */
 #include "script_component.hpp"
 {
-    _x params ["_msgType", "_name", "_pos", "", "", "_alive", "_side", "_isLeader", "_grpName"];
+    _x params ["_msgType", "_name", "_pos", "_dir", "_type", "_alive", "_side", "_isLeader", "_grpName", "_shotInfo", "_typeOfVeh", "_posVeh", "_dirVeh"];
     if ((toUpper(_msgType)) isEqualTo "UNIT") then {
         private _sideColor = (GVAR(sideColors) select _side);
         private _distance = (positionCameraToWorld [0, 0, 0]) distance _pos;
@@ -41,11 +41,21 @@
             };
             drawIcon3D [_icon, _sideColor, _pos, _size * _scale, _size * _scale, 0];
             drawIcon3D ["\a3\ui_f\data\igui\cfg\actions\clear_empty_ca.paa", [1, 1, 1, _alpha*_nametagVisibility], _pos, _size*1.4, _size*1.4, 0, _name, 2, PY(1.8), "RobotoCondensed", "center"];
+            _shotInfo params ["_frame", "_wDir"];
+            if (_frame == GVAR(FrameID)) then {
+                private _targetPos = _pos vectorAdd (_wDir vectorMultiply 1000);
+                drawLine3D [_pos, _targetPos, _sideColor];
+            };
         } else {
             if (_distance < 1000) then {
                 _sideColor set [3, 0.4];
                 private _scale = 1 + 0.4;
                 drawIcon3D ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _sideColor, _pos, 0.4*_scale, 0.4*_scale, 0];
+            };
+            _shotInfo params ["_frame", "_wDir"];
+            if (_frame == GVAR(FrameID)) then {
+                private _targetPos = _pos vectorAdd (_wDir vectorMultiply 1000);
+                drawLine3D [_pos, _targetPos, _sideColor];
             };
         };
 

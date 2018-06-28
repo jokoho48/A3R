@@ -7,9 +7,9 @@ class CfgPatches {
         weapons[] = {};
         requiredVersion = REQUIRED_VERSION;
         requiredAddons[] = {"cba_common"};
-        author = "";
-        authors[] = {"ACE Team", "Glowbal"};
-        authorUrl = "http://ace3mod.com";
+        author = "joko // Jonas";
+        authors[] = {"joko // Jonas"};
+        authorUrl = "https://github.com/jokoho48/A3R";
         VERSION_CONFIG;
     };
 };

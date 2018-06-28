@@ -25,7 +25,7 @@ if (_mapScale < 0.1) then {
     _textSize = _textSize * ((_mapScale / 0.1) max 0.5);
 };
 {
-    _x params ["_msgType", "_name", "_pos", "_dir", "_type", "_alive", "_side", "", "_grpName"];
+    _x params ["_msgType", "_name", "_pos", "_dir", "_type", "_alive", "_side", "_isLeader", "_grpName", "_shotInfo", "_typeOfVeh", "_posVeh", "_dirVeh"];
     if ((toUpper(_msgType)) isEqualTo "UNIT") then {
         private _color = (GVAR(sideColors) select _side);
         private _icon = "\A3\ui_f\data\map\vehicleicons\iconMan_ca.paa";
@@ -42,12 +42,17 @@ if (_mapScale < 0.1) then {
         _pos set [2, 0];
         _map drawIcon [_icon, _color, _pos, _size, _size, _dir, "", 2, _textSize, "PuristaMedium", 'right'];
         _map drawIcon ["a3\ui_f\data\Map\Markers\System\dummy_ca.paa", [1, 1, 1, 1], _pos, _size, _size, 0, _name, 2, _textSize, "PuristaMedium", 'right'];
+        _shotInfo params ["_frame", "_wDir"];
+        if (_frame == GVAR(FrameID)) then {
+            private _targetPos = _pos vectorAdd (_wDir vectorMultiply 1000);
+            _map drawLine [_pos, _targetPos, _color];
+        };
     };
     nil
 } count GVAR(FrameData);
 
 {
-    _x params ["_msgType", "", "_pos", "", "", "", "_side", "", "_grpName"];
+    _x params ["_msgType", "_name", "_pos", "_dir", "_type", "_alive", "_side", "_isLeader", "_grpName", "_shotInfo", "_typeOfVeh", "_posVeh", "_dirVeh"];
     if ((toUpper(_msgType)) isEqualTo "UNIT") then {
         _pos = +_pos;
         _pos set [2, 0];

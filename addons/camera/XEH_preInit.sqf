@@ -38,10 +38,13 @@ GVAR(TimelineActive) = false;
 GVAR(frameCount) = 0;
 GVAR(prevFrameID) = -1;
 GVAR(FrameID) = 1;
+GVAR(PlayingSpeed) = 1;
 
 GVAR(mouseToLook) = false;
 GVAR(Camera) = objNull;
 GVAR(CameraPos) = [0, 0, 0];
 GVAR(CameraDir) = 0;
 GVAR(CameraPitch) = 0;
+GVAR(deltaTime) = 0.025;
+GVAR(prevTime) = time;
 ADDON = true;

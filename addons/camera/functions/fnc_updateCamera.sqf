@@ -46,7 +46,7 @@ if (_deltaX != 0 || _deltaY != 0) then {
     [displayNull, _deltaX, _deltaY] call FUNC(mouseMovingEH);
 };
 
-GVAR(CameraPos) = GVAR(CameraPos) vectorAdd (_velocity vectorMultiply (((getPos GVAR(Camera)) select 2) * CGVAR(deltaTime)));
+GVAR(CameraPos) = GVAR(CameraPos) vectorAdd (_velocity vectorMultiply (((getPos GVAR(Camera)) select 2) * GVAR(deltaTime)));
 
 private _position = GVAR(CameraPos);
 private _direction = GVAR(CameraDir) + GVAR(CameraDirOffset);
