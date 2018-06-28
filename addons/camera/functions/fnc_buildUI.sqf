@@ -96,7 +96,7 @@ _ctrlGrpTimelineBackground ctrlCommit 0;
 private _ctrlTimelineProgress = _display ctrlCreate ["RscProgress", -1, _ctrlGrpTimeline];
 _ctrlTimelineProgress ctrlSetPosition [0, 0, (safeZoneW*0.7) - PX(7.5), PY(1)];
 _ctrlTimelineProgress ctrlSetTextColor [1, 1, 1, 1];
-_ctrlTimelineProgress progressSetPosition 0.5;
+_ctrlTimelineProgress progressSetPosition 0;
 _ctrlTimelineProgress ctrlCommit 0;
 
 uiNamespace setVariable [QGVAR(CtrlTimelineProgress), _ctrlTimelineProgress];
@@ -107,28 +107,29 @@ FUNC(updateProgress) = {
     private _pos = ctrlPosition _ctrl;
 
     _pos = (_mouseX - PX(7) ) / (_pos select 2);
-
-    _ctrl progressSetPosition _pos;
+    private _oldPos = progressPosition _ctrl;
+    if (_pos != _oldPos) then {
+        [QGVAR(PlaySpeedChanged), [_pos, _oldPos]] call CBA_fnc_localEvent;
+        _ctrl progressSetPosition _pos;
+    };
 };
 
-GVAR(TimelineActive) = false;
-
 _ctrlGrpTimeline ctrlAddEventHandler ["MouseButtonDown", {
-    params ["_ctrl", "_button", "_mouseX"];
+    params ["", "_button", "_mouseX"];
     if (_button == 0) then {
         [_mouseX] call FUNC(updateProgress);
         GVAR(TimelineActive) = true;
     };
 }];
 _ctrlGrpTimeline ctrlAddEventHandler ["MouseButtonUp", {
-    params ["_ctrl", "_button", "_mouseX", "_mouseY"];
+    params ["", "_button"];
     if (_button == 0) then {
         GVAR(TimelineActive) = false;
     };
 }];
 
 _ctrlGrpTimeline ctrlAddEventHandler ["MouseMoving", {
-    params ["", "_mouseX", "_mouseY"];
+    params ["", "_mouseX"];
     if (GVAR(TimelineActive)) then {
         [_mouseX] call FUNC(updateProgress);
     };
@@ -144,16 +145,19 @@ _ctrlPlayButtonBackground ctrlSetText "#(argb,8,8,3)color(0,0,0,0)";
 _ctrlPlayButtonBackground ctrlCommit 0;
 _ctrlGroupPlayButton setVariable [QGVAR(background), _ctrlPlayButtonBackground];
 
+GVAR(isPlaying) = false;
 private _ctrlPlayButtonIcon = _display ctrlCreate ["RscPicture", -1, _ctrlGroupPlayButton];
 _ctrlPlayButtonIcon ctrlSetPosition [0, 0, PX(3), PY(3)];
 _ctrlPlayButtonIcon ctrlSetText "\A3\3den\Data\Attributes\ComboPreview\play_ca.paa";
 _ctrlPlayButtonIcon ctrlSetTextColor [1, 1, 1, 1];
 _ctrlPlayButtonIcon ctrlCommit 0;
-
+_ctrlGroupPlayButton setVariable [QGVAR(icon), _ctrlPlayButtonIcon];
 _ctrlGroupPlayButton ctrlAddEventHandler ["MouseButtonClick", {
-    params ["_ctrlGrp", "_button", "_mouseX", "_mouseY"];
+    params ["_ctrlGrp", "_button"];
 
-    DUMP(_this);
+    GVAR(isPlaying) = !GVAR(isPlaying);
+    [QGVAR(playStatusChanged), GVAR(isPlaying)] call CBA_fnc_localEvent;
+    ["\A3\3den\Data\Attributes\ComboPreview\play_ca.paa", "\jk\addons\camera\UI\pause_ca.paa"] select GVAR(isPlaying);
 }];
 
 private _ctrlGroupSpeedButton = _display ctrlCreate ["RscControlsGroupNoScrollbars", -1, _ctrlGrpVideoCtrl];
@@ -174,10 +178,28 @@ _ctrlSpeedButtonText ctrlSetTextColor [1, 1, 1, 1];
 _ctrlSpeedButtonText ctrlSetBackgroundColor [0, 0, 0, 0];
 _ctrlSpeedButtonText ctrlSetText "1x";
 _ctrlSpeedButtonText ctrlCommit 0;
+_ctrlGroupSpeedButton setVariable [QGVAR(text), _ctrlSpeedButtonText];
 
 _ctrlGroupSpeedButton ctrlAddEventHandler ["MouseButtonClick", {
-    params ["_ctrlGrp", "_button", "_mouseX", "_mouseY"];
-
+    params ["_ctrlGrp", "_button"];
+    switch (_button) do {
+        case (0): {
+            GVAR(PlayingSpeed) = GVAR(PlayingSpeed) + 1;
+        };
+        case (1): {
+            GVAR(PlayingSpeed) = GVAR(PlayingSpeed) - 1;
+        };
+        case (2): {
+            GVAR(PlayingSpeed) = 1;
+        };
+        default {
+            DUMP("Not Bind Mouse Button");
+        };
+        [QGVAR(PlaySpeedChanged), GVAR(PlayingSpeed)] call CBA_fnc_localEvent;
+        private _buttonText = _ctrlGrp getVariable [QGVAR(text), controlNull];
+        _buttonText ctrlSetText format ["%1x", GVAR(PlayingSpeed)];
+        _buttonText ctrlCommit 0;
+    };
     DUMP(_this);
 }];
 

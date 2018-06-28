@@ -1,12 +1,43 @@
 #include "script_component.hpp"
-if !(EGVAR(render,isViewing)) exitWith {};
+if !(GVAR(isViewing)) exitWith {};
+
+GVAR(frameCount) = call EFUNC(data,frameCount);
+
+
+addMissionEventHandler ["Draw3D", {
+    call FUNC(render3d);
+}];
+[
+    {
+        !(isNull ((findDisplay 12) displayCtrl 51))
+    }, {
+        ((findDisplay 12) displayCtrl 51) ctrlAddEventHandler ["Draw", {
+            _this call FUNC(render2d);
+        }];
+    }
+] call CBA_fnc_waitUntilAndExecute;
+
+[{
+    if (GVAR(prevFrameID) != GVAR(FrameID)) then {
+        private _index = GVAR(FrameData) findIf {(_x select 0) isEqualTo "ENVDATA"};
+        if (_index != -1) then {
+            (GVAR(FrameData) select _index) params ["", "_wind", "_windDir", "_date", "_overcast", "_fog", "_fogParams", "_rain", "_rainbow"];
+            _wind set [2, true];
+            setWind _wind;
+            1 setWindDir _windDir;
+            setDate _date;
+            1 setOvercast _overcast;
+            1 setRain _rain;
+            1 setRainbow _rainbow;
+            1 setFog _fog;
+            1 setFog _fogParams;
+        };
+        GVAR(prevFrameID) = GVAR(FrameID);
+    };
+}] call CBA_fnc_addPerframeHandler;
 
 // Var Def
-GVAR(mouseToLook) = false;
-GVAR(Camera) = objNull;
-GVAR(CameraPos) = [0, 0, 0];
-GVAR(CameraDir) = 0;
-GVAR(CameraPitch) = 0;
+
 
 [
     {!(isNull (findDisplay 49))},
