@@ -1,3 +1,4 @@
+#include "script_component.hpp"
 /*
  * Author: joko // Jonas
  * Composes Data to Send of To Extension
@@ -13,7 +14,6 @@
  *
  * Public: No
  */
-#include "script_component.hpp"
 private _allTrackedUnits = allUnits;
 _allTrackedUnits append allDeadMen;
 GVAR(FrameID) = GVAR(FrameID) + 1;

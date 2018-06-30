@@ -1,3 +1,4 @@
+#include "script_component.hpp"
 /*
  * Author: joko // Jonas
  * Description
@@ -13,7 +14,6 @@
  *
  * Public: No
  */
-#include "script_component.hpp"
 {
     _x params ["_msgType", "_name", "_pos", "_dir", "_type", "_alive", "_side", "_isLeader", "_grpName", "_shotInfo", "_typeOfVeh", "_posVeh", "_dirVeh"];
     if ((toUpper(_msgType)) isEqualTo "UNIT") then {

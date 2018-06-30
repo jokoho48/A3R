@@ -1,3 +1,4 @@
+#include "script_component.hpp"
 /*
  * Author: joko // Jonas
  * Request Frame Data from Extension
@@ -13,7 +14,6 @@
  *
  * Public: No
  */
-#include "script_component.hpp"
 params ["_keyFrame"];
 private _ret = [];
 while {

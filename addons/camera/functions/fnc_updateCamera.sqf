@@ -1,3 +1,4 @@
+#include "script_component.hpp"
 /*
  * Author: joko // Jonas
  * Description
@@ -13,7 +14,6 @@
  *
  * Public: No
  */
-#include "script_component.hpp"
 private _tempDir = GVAR(CameraDir);
 private _forward = [sin _tempDir, cos _tempDir, 0];
 private _right = [cos _tempDir, -sin _tempDir, 0];

@@ -1,3 +1,4 @@
+#include "script_component.hpp"
 /*
  * Author: Badguy
  * Description
@@ -13,7 +14,6 @@
  *
  * Public: No
  */
-#include "script_component.hpp"
 
 /*
 GVAR(Camera) = "Camera" camCreate (eyePos player);
